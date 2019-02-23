@@ -5,6 +5,7 @@ import {
   Button,
   Text,
   TextInput,
+  TouchableOpacity,
   View
 } from "react-native";
 import style from "./style";
@@ -26,14 +27,17 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
-    if (this.state.apiAddressSet) {
-      console.log("componoent mount");
-      this.getNodes();
-    }
+    // if (this.state.apiAddressSet) {
+    //   console.log("componoent mount");
+    //   this.getNodes();
+    // }
+
+    // Attempt to load API address from local storage when app boots
     try {
       AsyncStorage.getItem("apiAddress").then(apiAddress => {
         console.log("API address loaded from local storage:", apiAddress);
-        this.setState({ apiAddress });
+        this.setState({ apiAddress, apiAddressSet: true });
+        this.getNodes();
       });
     } catch (err) {
       console.log(err);
@@ -43,8 +47,10 @@ export default class App extends React.Component {
   getNodes() {
     console.log("Fetching Nodes from API...");
     const addr = `http://${this.state.apiAddress}:5000/node/list`;
+
     Axios.get(addr).then(res => {
       this.setState({ nodesList: res.data });
+      console.log("Nodes List: ", res.data);
     });
   }
 
@@ -72,7 +78,14 @@ export default class App extends React.Component {
   nodeList() {
     return (
       <View style={{ width: "100%" }}>
-        <Text>Nodes</Text>
+        <View>
+          <TouchableOpacity
+            onPress={() => this.setState({ apiAddressSet: false })}
+          >
+            <Text>Flux API address: {this.state.apiAddress}</Text>
+          </TouchableOpacity>
+        </View>
+        <Text>Current Flux Nodes:</Text>
         {this.state.nodesList.map(node => {
           return (
             <NodeData
@@ -115,6 +128,7 @@ export default class App extends React.Component {
   render() {
     return (
       <View style={style.flexContainer}>
+        {/* Modal for editing Flux nodes */}
         <ContentModal
           visible={this.state.editModalOpen}
           height="80%"
