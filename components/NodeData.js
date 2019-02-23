@@ -18,6 +18,7 @@ const NodeData = ({ node, onPress }) => {
       >
         <Text>{node.name}</Text>
         <Text>{stateLookup[node.state]}</Text>
+        <Text>{`${node.b0}, ${node.g0}, ${node.b0}`}</Text>
       </TouchableOpacity>
     </View>
   );

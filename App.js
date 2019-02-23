@@ -26,6 +26,10 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
+    if (this.state.apiAddressSet) {
+      console.log("componoent mount");
+      this.getNodes();
+    }
     try {
       AsyncStorage.getItem("apiAddress").then(apiAddress => {
         console.log("API address loaded from local storage:", apiAddress);
@@ -33,9 +37,6 @@ export default class App extends React.Component {
       });
     } catch (err) {
       console.log(err);
-    }
-    if (this.state.apiAddressSet) {
-      this.getNodes();
     }
   }
 
