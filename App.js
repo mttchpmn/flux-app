@@ -9,6 +9,9 @@ import {
 } from "react-native";
 import style from "./style";
 import Axios from "axios";
+import NodeData from "./components/NodeData";
+import ContentModal from "./components/ContentModal";
+import EditView from "./components/EditView";
 
 export default class App extends React.Component {
   constructor(props) {
@@ -17,6 +20,7 @@ export default class App extends React.Component {
       apiAddress: null,
       apiAddressSet: false, // binary switch to make sure we don't send GET request early
       nodesList: [],
+      editModalOpen: false,
       selectedNode: {}
     };
   }
@@ -66,9 +70,20 @@ export default class App extends React.Component {
 
   nodeList() {
     return (
-      <View>
+      <View style={{ width: "100%" }}>
         <Text>Nodes</Text>
-        <Text>{JSON.stringify(this.state)}</Text>
+        {this.state.nodesList.map(node => {
+          return (
+            <NodeData
+              node={node}
+              onPress={() =>
+                this.setState({ selectedNode: node, editModalOpen: true })
+              }
+              key={node.id}
+            />
+          );
+        })}
+        <Text>Add New</Text>
       </View>
     );
   }
@@ -99,6 +114,22 @@ export default class App extends React.Component {
   render() {
     return (
       <View style={style.flexContainer}>
+        <ContentModal
+          visible={this.state.editModalOpen}
+          height="80%"
+          width="75%"
+          onClose={() => this.setState({ editModalOpen: false })}
+        >
+          <EditView
+            node={this.state.selectedNode}
+            apiAddress={"192.168.1.69"}
+            onSubmit={() => {
+              this.setState({ editModalOpen: false });
+              this.getNodes();
+            }}
+          />
+        </ContentModal>
+
         {this.state.apiAddressSet ? this.nodeList() : this.apiAddressEntry()}
       </View>
     );

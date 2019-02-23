@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, TouchableOpacity, View, Modal } from "react-native";
+import { Text, TouchableOpacity, View, Modal } from "react-native";
 
 const ContentModal = ({
   visible,
@@ -24,28 +24,19 @@ const ContentModal = ({
           alignItems: "center"
         }}
       >
-        <TouchableOpacity
+        <View
           style={{
-            width: "100%",
-            height: "100%",
-            justifyContent: "center",
-            alignItems: "center"
+            backgroundColor: "#fff",
+            justifyContent: "space-between",
+            height: height,
+            width: width,
+            padding: 20,
+            paddingTop: 30,
+            borderRadius: 15
           }}
-          onPress={() => onClose()}
         >
-          <View
-            style={{
-              padding: 20,
-              paddingTop: 30,
-              backgroundColor: "#fff",
-              height: height,
-              width: width,
-              borderRadius: 15
-            }}
-          >
-            {children}
-          </View>
-        </TouchableOpacity>
+          {children}
+        </View>
       </View>
     </Modal>
   );
