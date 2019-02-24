@@ -91,6 +91,9 @@ class EditView extends React.Component {
           <TouchableOpacity
             onPress={() => {
               this.saveNode();
+              Axios.get(
+                `http://${this.props.apiAddress}:5000/node?id=${this.state.id}`
+              ).then(res => console.log());
               this.props.onSubmit();
             }}
           >

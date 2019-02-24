@@ -21,8 +21,20 @@ export default class App extends React.Component {
       apiAddress: null,
       apiAddressSet: false, // binary switch to make sure we don't send GET request early
       nodesList: [],
+      idModalOpen: false,
       editModalOpen: false,
-      selectedNode: {}
+      selectedNode: {},
+      newNodeId: "",
+      defaultNode: {
+        id: null,
+        state: 1,
+        name: "New Node",
+        r0: 0,
+        g0: 180,
+        b0: 255,
+        brightness: 200,
+        pattern: "static"
+      }
     };
   }
 
@@ -97,7 +109,13 @@ export default class App extends React.Component {
             />
           );
         })}
-        <Text>Add New</Text>
+        <View>
+          <TouchableOpacity
+            onPress={() => this.setState({ idModalOpen: true })}
+          >
+            <Text>Add New</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
@@ -143,6 +161,39 @@ export default class App extends React.Component {
               this.getNodes();
             }}
           />
+        </ContentModal>
+
+        {/* Modal for adding new Flux nodes */}
+        <ContentModal
+          visible={this.state.idModalOpen}
+          height="50%"
+          width="60%"
+          onClose={() => this.setState({ idModalOpen: false })}
+        >
+          <View>
+            <Text>Enter ID of new FLUX Node</Text>
+            <TextInput
+              onChangeText={text => this.setState({ newNodeId: text })}
+              placeholder=""
+              value={this.state.newNodeId}
+            />
+            <View>
+              <TouchableOpacity
+                onPress={() => {
+                  this.setState({ idModalOpen: false });
+                  const newNode = this.state.defaultNode;
+                  newNode.id = this.state.newNodeId;
+                  this.setState({
+                    selectedNode: newNode,
+                    newNodeId: "",
+                    editModalOpen: true
+                  });
+                }}
+              >
+                <Text>Add Node</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
         </ContentModal>
 
         {this.state.apiAddressSet ? this.nodeList() : this.apiAddressEntry()}
