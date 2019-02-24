@@ -20,6 +20,7 @@ export default class App extends React.Component {
     this.state = {
       apiAddress: null,
       apiAddressSet: false, // binary switch to make sure we don't send GET request early
+      apiOffline: false,
       nodesList: [],
       idModalOpen: false,
       editModalOpen: false,
@@ -60,10 +61,15 @@ export default class App extends React.Component {
     console.log("Fetching Nodes from API...");
     const addr = `http://${this.state.apiAddress}:5000/node/list`;
 
-    Axios.get(addr).then(res => {
-      this.setState({ nodesList: res.data });
-      console.log("Nodes List: ", res.data);
-    });
+    Axios.get(addr)
+      .then(res => {
+        this.setState({ nodesList: res.data });
+        console.log("Nodes List: ", res.data);
+      })
+      .catch(err => {
+        console.log("ERROR: ", err);
+        this.setState({ apiOffline: true });
+      });
   }
 
   saveApiAddress() {
@@ -88,34 +94,41 @@ export default class App extends React.Component {
   }
 
   nodeList() {
+    console.log("API: ", this.state.apiOffline);
     return (
       <View style={{ width: "100%" }}>
-        <View>
-          <TouchableOpacity
-            onPress={() => this.setState({ apiAddressSet: false })}
-          >
-            <Text>Flux API address: {this.state.apiAddress}</Text>
-          </TouchableOpacity>
-        </View>
-        <Text>Current Flux Nodes:</Text>
-        {this.state.nodesList.map(node => {
-          return (
-            <NodeData
-              node={node}
-              onPress={() =>
-                this.setState({ selectedNode: node, editModalOpen: true })
-              }
-              key={node.id}
-            />
-          );
-        })}
-        <View>
-          <TouchableOpacity
-            onPress={() => this.setState({ idModalOpen: true })}
-          >
-            <Text>Add New</Text>
-          </TouchableOpacity>
-        </View>
+        {this.state.apiOffline ? (
+          <Text>Can't contact FLUX API</Text>
+        ) : (
+          <View>
+            <View>
+              <TouchableOpacity
+                onPress={() => this.setState({ apiAddressSet: false })}
+              >
+                <Text>Flux API address: {this.state.apiAddress}</Text>
+              </TouchableOpacity>
+            </View>
+            <Text>Current Flux Nodes:</Text>
+            {this.state.nodesList.map(node => {
+              return (
+                <NodeData
+                  node={node}
+                  onPress={() =>
+                    this.setState({ selectedNode: node, editModalOpen: true })
+                  }
+                  key={node.id}
+                />
+              );
+            })}
+            <View>
+              <TouchableOpacity
+                onPress={() => this.setState({ idModalOpen: true })}
+              >
+                <Text>Add New</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        )}
       </View>
     );
   }

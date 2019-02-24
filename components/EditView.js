@@ -1,5 +1,13 @@
 import React from "react";
-import { Slider, Text, View, Picker, TouchableOpacity } from "react-native";
+import {
+  Slider,
+  Text,
+  Switch,
+  View,
+  Picker,
+  TouchableOpacity,
+  TextInput
+} from "react-native";
 import Axios from "axios";
 
 class EditView extends React.Component {
@@ -22,6 +30,16 @@ class EditView extends React.Component {
     return (
       <View>
         <Text>Edit Node</Text>
+        <Text>Name</Text>
+        <TextInput
+          onChangeText={text => this.setState({ name: text })}
+          value={this.state.name}
+        />
+        <Text>State</Text>
+        <Switch
+          value={this.state.state}
+          onValueChange={val => this.setState({ state: val })}
+        />
         <View
           style={{
             backgroundColor: `rgba(${this.state.r0}, ${this.state.g0}, ${
