@@ -112,7 +112,7 @@ class EditView extends React.Component {
                 mode={"dropdown"}
               >
                 <Picker.Item label="Static" value="static" />
-                <Picker.Item label="Breathing" value="breathe" />
+                <Picker.Item label="Breathing" value="breathing" />
                 <Picker.Item label="Rainbow" value="rainbow" />
               </Picker>
             </View>
@@ -149,7 +149,5 @@ class EditView extends React.Component {
     );
   }
 }
-
-const s = StyleSheet.create({});
 
 export default EditView;
