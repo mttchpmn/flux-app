@@ -5,10 +5,13 @@ import {
   Switch,
   View,
   Picker,
+  StyleSheet,
   TouchableOpacity,
   TextInput
 } from "react-native";
 import Axios from "axios";
+
+import style from "../style";
 
 class EditView extends React.Component {
   constructor(props) {
@@ -28,32 +31,40 @@ class EditView extends React.Component {
 
   render() {
     return (
-      <View>
-        <Text>Edit Node</Text>
-        <Text>Name</Text>
-        <TextInput
-          onChangeText={text => this.setState({ name: text })}
-          value={this.state.name}
-        />
-        <Text>State</Text>
-        <Switch
-          value={this.state.state}
-          onValueChange={val => this.setState({ state: val })}
-        />
-        <View
-          style={{
-            backgroundColor: `rgba(${this.state.r0}, ${this.state.g0}, ${
-              this.state.b0
-            }, ${this.state.brightness})`,
-            width: 100,
-            height: 100,
-            borderRadius: 50,
-            alignSelf: "center"
-          }}
-        />
-        <View>
+      <View style={style.flexContainer}>
+        {/* Name and State */}
+        <View style={[style.flexRow, { width: "100%" }]}>
+          <View style={{ width: "70%" }}>
+            <TextInput
+              onChangeText={text => this.setState({ name: text })}
+              value={this.state.name}
+              style={[style.textInput, style.heading2]}
+            />
+          </View>
+
           <View>
-            <Text>Red</Text>
+            <Switch
+              value={this.state.state}
+              onValueChange={val => this.setState({ state: val })}
+            />
+          </View>
+        </View>
+
+        {/* Color sliders */}
+        <View style={{ width: "100%" }}>
+          <View
+            style={{
+              backgroundColor: `rgba(${this.state.r0}, ${this.state.g0}, ${
+                this.state.b0
+              }, ${this.state.brightness})`,
+              width: 100,
+              height: 100,
+              borderRadius: 50,
+              alignSelf: "center"
+            }}
+          />
+          <View>
+            <Text style={style.heading3}>Red</Text>
             <Slider
               minimumValue={0}
               maximumValue={255}
@@ -62,7 +73,7 @@ class EditView extends React.Component {
               style={{ width: "90%" }}
             />
 
-            <Text>Green</Text>
+            <Text style={style.heading3}>Green</Text>
             <Slider
               minimumValue={0}
               maximumValue={255}
@@ -71,7 +82,7 @@ class EditView extends React.Component {
               style={{ width: "90%" }}
             />
 
-            <Text>Blue</Text>
+            <Text style={style.heading3}>Blue</Text>
             <Slider
               minimumValue={0}
               maximumValue={255}
@@ -80,7 +91,7 @@ class EditView extends React.Component {
               style={{ width: "90%" }}
             />
 
-            <Text>Brightness</Text>
+            <Text style={style.heading3}>Brightness</Text>
             <Slider
               minimumValue={0}
               maximumValue={255}
@@ -91,42 +102,54 @@ class EditView extends React.Component {
               style={{ width: "90%" }}
             />
 
-            <Text>Pattern</Text>
-            <Picker
-              selectedValue={this.state.pattern}
-              style={{ width: "90%" }}
-              onValueChange={val => this.setState({ pattern: val })}
-              mode={"dropdown"}
-            >
-              <Picker.Item label="Static" value="static" />
-              <Picker.Item label="Breathing" value="breathe" />
-              <Picker.Item label="Rainbow" value="rainbow" />
-            </Picker>
+            {/* Pattern */}
+            <View style={{ width: "100%" }}>
+              <Text style={style.heading3}>Pattern</Text>
+              <Picker
+                selectedValue={this.state.pattern}
+                style={{ width: "90%" }}
+                onValueChange={val => this.setState({ pattern: val })}
+                mode={"dropdown"}
+              >
+                <Picker.Item label="Static" value="static" />
+                <Picker.Item label="Breathing" value="breathe" />
+                <Picker.Item label="Rainbow" value="rainbow" />
+              </Picker>
+            </View>
           </View>
         </View>
 
-        <View>
-          <TouchableOpacity
-            onPress={() => {
-              this.saveNode();
-              Axios.get(
-                `http://${this.props.apiAddress}:5000/node?id=${this.state.id}`
-              ).then(res => console.log());
-              this.props.onSubmit();
-            }}
-          >
-            <Text>Save</Text>
-          </TouchableOpacity>
-        </View>
+        {/* Save & Cancel */}
+        <View style={[style.flexRow, { width: "100%" }]}>
+          <View>
+            <TouchableOpacity
+              onPress={() => {
+                this.saveNode();
+                Axios.get(
+                  `http://${this.props.apiAddress}:5000/node?id=${
+                    this.state.id
+                  }`
+                ).then(res => console.log());
+                this.props.onSubmit();
+              }}
+            >
+              <Text style={[style.heading3, { fontWeight: "bold" }]}>Save</Text>
+            </TouchableOpacity>
+          </View>
 
-        <View>
-          <TouchableOpacity onPress={() => this.props.onSubmit()}>
-            <Text>Cancel</Text>
-          </TouchableOpacity>
+          <View>
+            <TouchableOpacity onPress={() => this.props.onSubmit()}>
+              <Text style={[style.heading3, { fontWeight: "bold" }]}>
+                Cancel
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     );
   }
 }
+
+const s = StyleSheet.create({});
 
 export default EditView;

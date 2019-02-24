@@ -21,10 +21,24 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center"
   },
-  heading1: {},
-  heading2: {},
-  heading3: {},
-  content: {}
+  heading1: {
+    fontSize: 20,
+    fontWeight: "bold"
+  },
+  heading2: {
+    fontSize: 18,
+    fontWeight: "bold"
+  },
+  heading3: {
+    fontSize: 16
+  },
+  content: {},
+  textInput: {
+    minHeight: 40,
+    paddingLeft: 5,
+    paddingBottom: 1,
+    width: "100%"
+  }
 });
 
 export default styles;
