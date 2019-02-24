@@ -21,6 +21,11 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center"
   },
+  title: {
+    fontSize: 40,
+    fontWeight: "bold",
+    textAlign: "center"
+  },
   heading1: {
     fontSize: 20,
     fontWeight: "bold"

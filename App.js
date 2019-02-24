@@ -8,8 +8,9 @@ import {
   TouchableOpacity,
   View
 } from "react-native";
-import style from "./style";
 import Axios from "axios";
+
+import style from "./style";
 import NodeData from "./components/NodeData";
 import ContentModal from "./components/ContentModal";
 import EditView from "./components/EditView";
@@ -94,37 +95,58 @@ export default class App extends React.Component {
   }
 
   nodeList() {
-    console.log("API: ", this.state.apiOffline);
     return (
-      <View style={{ width: "100%" }}>
+      <View style={{ width: "100%", height: "100%" }}>
         {this.state.apiOffline ? (
           <Text>Can't contact FLUX API</Text>
         ) : (
-          <View>
-            <View>
+          <View
+            style={{
+              width: "100%",
+              flex: 1,
+              justifyContent: "flex-start",
+              alignContent: "center",
+              marginTop: 30
+            }}
+          >
+            <Text style={style.title}>FLUX</Text>
+
+            {/* Nodes List */}
+            <View style={{ marginTop: 50 }}>
+              <Text style={[style.heading2, { textAlign: "center" }]}>
+                Available FLUX Nodes:
+              </Text>
+              {this.state.nodesList.map(node => {
+                return (
+                  <NodeData
+                    node={node}
+                    onPress={() =>
+                      this.setState({ selectedNode: node, editModalOpen: true })
+                    }
+                    key={node.id}
+                  />
+                );
+              })}
+            </View>
+
+            <View style={{ width: "80%", marginTop: 15, alignSelf: "center" }}>
+              <Button
+                title="Add New"
+                onPress={() => this.setState({ idModalOpen: true })}
+              />
+            </View>
+
+            {/* Edit API button */}
+            <View
+              style={{
+                marginTop: 80,
+                justifyContent: "flex-end"
+              }}
+            >
               <TouchableOpacity
                 onPress={() => this.setState({ apiAddressSet: false })}
               >
-                <Text>Flux API address: {this.state.apiAddress}</Text>
-              </TouchableOpacity>
-            </View>
-            <Text>Current Flux Nodes:</Text>
-            {this.state.nodesList.map(node => {
-              return (
-                <NodeData
-                  node={node}
-                  onPress={() =>
-                    this.setState({ selectedNode: node, editModalOpen: true })
-                  }
-                  key={node.id}
-                />
-              );
-            })}
-            <View>
-              <TouchableOpacity
-                onPress={() => this.setState({ idModalOpen: true })}
-              >
-                <Text>Add New</Text>
+                <Text style={{ textAlign: "center" }}>Edit API address</Text>
               </TouchableOpacity>
             </View>
           </View>
